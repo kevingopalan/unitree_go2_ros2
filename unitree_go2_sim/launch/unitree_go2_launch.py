@@ -174,11 +174,13 @@ def generate_launch_description():
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
-        launch_arguments={'gz_args': PathJoinSubstitution([
-            unitree_go2_description,
-            'worlds',
-            'default.sdf'
-        ])}.items(),
+        launch_arguments={
+            'gz_args': [PathJoinSubstitution([
+                unitree_go2_description,
+                'worlds',
+                'default.sdf'
+            ]), ' -r']  # Add -r flag to start unpaused
+        }.items(),
     )
     
     # Spawn robot in Gazebo Sim
@@ -223,14 +225,14 @@ def generate_launch_description():
     
     # Use spawner nodes directly to handle the configuration step. (load → configure → activate)
     controller_spawner_js = TimerAction(
-        period=15.0,  # Wait for Gazebo to fully initialize
+        period=20.0,  # Wait for Gazebo to fully initialize
         actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
                 output="screen",
                 arguments=[
-                    "--controller-manager-timeout", "60",  # Longer timeout
+                    "--controller-manager-timeout", "120",  # Longer timeout
                     "joint_states_controller",  # No --inactive flag to ensure full activation
                 ],
                 parameters=[{"use_sim_time": use_sim_time}],
@@ -239,14 +241,14 @@ def generate_launch_description():
     )
 
     controller_spawner_effort = TimerAction(
-        period=20.0,  # Wait 5 seconds after joint_states_controller
+        period=30.0,  # Wait 5 seconds after joint_states_controller
         actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
                 output="screen",
                 arguments=[
-                    "--controller-manager-timeout", "60",  # Longer timeout
+                    "--controller-manager-timeout", "120",  # Longer timeout
                     "joint_group_effort_controller",  # No --inactive flag to ensure full activation
                 ],
                 parameters=[{"use_sim_time": use_sim_time}],

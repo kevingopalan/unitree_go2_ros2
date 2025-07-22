@@ -3,6 +3,9 @@ controller_manager:
     use_sim_time: true
     update_rate: 250  # Hz
 
+    # Increase the controller switch timeout
+    controller_manager_timeout: 10.0  # seconds (default is 5.0)
+
     joint_states_controller:
       type: joint_state_broadcaster/JointStateBroadcaster
 
