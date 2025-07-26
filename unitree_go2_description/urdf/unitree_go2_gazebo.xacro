@@ -15,13 +15,13 @@
   </gazebo>
 
   <!-- Robot-wide physics properties -->
-  <gazebo>
+  <!-- <gazebo>
     <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics">
       <engine>
-        <filename>z-physics-dartsim-plugin</filename>
+        <filename>gz-physics-bullet-plugin</filename>
       </engine>
     </plugin>
-  </gazebo>
+  </gazebo> -->
 
   <!-- ROS2 Control plugin -->
   <gazebo>
